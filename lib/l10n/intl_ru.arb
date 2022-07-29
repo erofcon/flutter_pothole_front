@@ -1,0 +1,39 @@
+{
+  "app_title": "Система мониторинга дорожного полотна",
+
+  "sidebar_list_info": "Инфо",
+  "sidebar_list_create": "Обноружение",
+  "sidebar_list_create_single_task":"Создать задачу",
+  "sidebar_list_result_detection": "Результат детектирования",
+  "sidebar_menu_tasks": "Задачи",
+  "sidebar_menu_map": "Карта",
+  "sidebar_menu_report": "Отчет",
+  "sidebar_menu_log_out": "Выйти",
+
+  "button_add": "Добавить задачу",
+
+  "home_task_card_button": "показать",
+  "home_task_card_1": "Текущие задачи",
+  "home_task_card_2": "Выполненые задачи",
+  "home_task_card_3": "Просроченные задачи",
+
+  "home_statistic_card_title": "Статистика",
+
+  "home_last_file_grid_title": "Последние файлы",
+
+  "task_grid_data": "Дата",
+  "task_grid_category": "Категория",
+  "task_grid_description": "Описание",
+  "task_grid_state": "Состояние",
+  "task_grid_curator": "Куратор",
+  "task_grid_executor": "Исполнитель",
+
+  "user_is_admin": "администратор",
+  "user_is_curator": "куратор",
+  "user_is_executor":"исполнитель",
+
+  "data_load_error":"ошибка загрузки данных",
+
+  "select_category_dropdown":"выберите категорию",
+  "select_related_user":"выберите исполнителя"
+}
