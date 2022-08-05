@@ -100,6 +100,16 @@ class S {
     );
   }
 
+  /// `Task list`
+  String get sidebar_list_task_list {
+    return Intl.message(
+      'Task list',
+      name: 'sidebar_list_task_list',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Tasks`
   String get sidebar_menu_tasks {
     return Intl.message(
@@ -325,6 +335,76 @@ class S {
     return Intl.message(
       'choose executor',
       name: 'select_related_user',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Run detection`
+  String get run_detection {
+    return Intl.message(
+      'Run detection',
+      name: 'run_detection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DateTime`
+  String get dateTime {
+    return Intl.message(
+      'DateTime',
+      name: 'dateTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attach video`
+  String get attach_video {
+    return Intl.message(
+      'Attach video',
+      name: 'attach_video',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select DateTime`
+  String get select_date_time {
+    return Intl.message(
+      'Select DateTime',
+      name: 'select_date_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select video`
+  String get select_video {
+    return Intl.message(
+      'Select video',
+      name: 'select_video',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Accepted File Types: .mp4,  .MJPEG`
+  String get accepted_video_types {
+    return Intl.message(
+      'Accepted File Types: .mp4,  .MJPEG',
+      name: 'accepted_video_types',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `upload`
+  String get upload {
+    return Intl.message(
+      'upload',
+      name: 'upload',
       desc: '',
       args: [],
     );

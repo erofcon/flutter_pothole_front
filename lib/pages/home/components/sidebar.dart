@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_pothole_front/models/login_response.dart';
 import 'package:flutter_pothole_front/services/shared_service.dart';
 import 'package:flutter_pothole_front/utils/constants.dart';
+import 'package:provider/provider.dart';
 
 import '../../../controller/sidebar_controller.dart';
 import '../../../generated/l10n.dart';
@@ -18,14 +19,10 @@ class SideBar extends StatefulWidget {
 
 class _SideBarState extends State<SideBar> {
   late bool isDark;
-  late final User? user;
-  late Future<void> _futureGetUser;
 
   @override
   void initState() {
     super.initState();
-    _futureGetUser = getUser();
-
     AdaptiveTheme.of(context).mode.isLight == true
         ? isDark = false
         : isDark = true;
@@ -34,27 +31,17 @@ class _SideBarState extends State<SideBar> {
   @override
   void dispose() {
     super.dispose();
-    print("sid");
   }
 
-  Future<void> getUser() async {
-    user = await SharedService.getUserDetails();
-    print(user!.username);
-    setState((){});
-  }
 
   @override
   Widget build(BuildContext context) {
+    User user = WatchContext(context).watch<User>();
     return Drawer(
       elevation: 9.0,
       backgroundColor: Theme.of(context).primaryColor,
       child: SafeArea(
-        child: FutureBuilder(
-          future: _futureGetUser,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Column(
-                children: <Widget>[
+        child: Column(children: <Widget>[
                   Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: defaultPadding,
@@ -96,7 +83,7 @@ class _SideBarState extends State<SideBar> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                                '${user?.firstName ?? ''} ${user?.lastName ?? ''}',
+                                '${user.firstName?? ''} ${user.lastName ?? ''}',
                                 style: TextStyle(
                                     color: Theme.of(context).cardColor)),
                             IconButton(
@@ -123,11 +110,11 @@ class _SideBarState extends State<SideBar> {
                           ],
                         ),
                         Text((() {
-                          if (user?.isSuperUser ?? true) {
+                          if (user.isSuperUser ?? false) {
                             return S.of(context).user_is_admin;
-                          } else if (user?.isCreator ?? true) {
+                          } else if (user.isCreator ?? false) {
                             return S.of(context).user_is_curator;
-                          } else if (user?.isExecutor ?? true) {
+                          } else if (user.isExecutor ?? false) {
                             return S.of(context).user_is_executor;
                           }
                           return '';
@@ -148,28 +135,39 @@ class _SideBarState extends State<SideBar> {
                               icon: Icons.info_outline,
                               press: () {
                                 SideBarController.controlMenu();
-                                Modular.to.navigate('/info_page');
+                                Modular.to.navigate('/info');
                                 // Modular.to.pushReplacementNamed('/info_page');
                               }),
-                          if (user?.isSuperUser == true || user?.isCreator == true)
+                          if (user.isCreator == true)
+                            DrawerList(
+                                title: S
+                                    .of(context)
+                                    .sidebar_list_create_single_task,
+                                icon: Icons.create_outlined,
+                                press: () {
+                                  SideBarController.controlMenu();
+                                  Modular.to.navigate('/createTask');
+                                  // Modular.to.pushReplacementNamed('/createTask');
+                                }),
+                          if (user.isCreator == true||user.isSuperUser==true)
+                            DrawerList(
+                                title:
+                                    S.of(context).sidebar_list_result_detection,
+                                icon: Icons.reset_tv_outlined,
+                                press: () {
+                                  SideBarController.controlMenu();
+                                  Modular.to.navigate('/detectionResult');
+                                  // Modular.to.pushReplacementNamed('/detectionResult');
+                                }),
                           DrawerList(
-                              title:
-                                  S.of(context).sidebar_list_create_single_task,
-                              icon: Icons.create_outlined,
+                              title: S
+                                  .of(context)
+                                  .sidebar_list_task_list,
+                              icon: Icons.list,
                               press: () {
                                 SideBarController.controlMenu();
-                                Modular.to.navigate('/createTask');
+                                Modular.to.navigate('/taskList');
                                 // Modular.to.pushReplacementNamed('/createTask');
-                              }),
-                          if (user?.isSuperUser == true || user?.isCreator == true)
-                          DrawerList(
-                              title:
-                                  S.of(context).sidebar_list_result_detection,
-                              icon: Icons.reset_tv_outlined,
-                              press: () {
-                                SideBarController.controlMenu();
-                                Modular.to.navigate('/detectionResult');
-                                // Modular.to.pushReplacementNamed('/detectionResult');
                               }),
                           DrawerList(
                               title: S.of(context).sidebar_menu_map,
@@ -177,13 +175,12 @@ class _SideBarState extends State<SideBar> {
                               press: () {
                                 SideBarController.controlMenu();
                                 Modular.to.navigate('/map');
-                                // Modular.to.pushReplacementNamed('/map');
                               }),
-                          if (user?.isSuperUser == true || user?.isCreator == true)
-                          DrawerList(
-                              title: S.of(context).sidebar_menu_report,
-                              icon: Icons.report_gmailerrorred_outlined,
-                              press: () {}),
+                          if (user.isCreator == true||user.isSuperUser==true)
+                            DrawerList(
+                                title: S.of(context).sidebar_menu_report,
+                                icon: Icons.report_gmailerrorred_outlined,
+                                press: () {}),
                           DrawerList(
                               title: S.of(context).sidebar_menu_log_out,
                               icon: Icons.logout,
@@ -198,106 +195,6 @@ class _SideBarState extends State<SideBar> {
                     ),
                   ),
                 ],
-              );
-            } else {
-              return Column(
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: defaultPadding,
-                        horizontal: defaultPadding * 0.8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const <Widget>[
-                            Skeleton(
-                              height: 80,
-                              width: 80,
-                              opacity: 0.2,
-                            ),
-                            Skeleton(
-                              height: 30,
-                              width: 30,
-                              opacity: 0.2,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: defaultPadding,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const <Widget>[
-                            Skeleton(
-                              height: 15,
-                              width: 80,
-                              opacity: 0.2,
-                            ),
-                            Skeleton(
-                              height: 30,
-                              width: 30,
-                              opacity: 0.2,
-                            ),
-                          ],
-                        ),
-                        const Skeleton(
-                          height: 15,
-                          width: 80,
-                          opacity: 0.2,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Flexible(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: defaultPadding, horizontal: defaultPadding),
-                      decoration:
-                          BoxDecoration(color: Theme.of(context).cardColor),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const <Widget>[
-                          Skeleton(
-                            height: 20,
-                            width: double.infinity,
-                            opacity: 0.2,
-                          ),
-                          Skeleton(
-                            height: 20,
-                            width: double.infinity,
-                            opacity: 0.2,
-                          ),
-                          Skeleton(
-                            height: 20,
-                            width: double.infinity,
-                            opacity: 0.2,
-                          ),
-                          Skeleton(
-                            height: 20,
-                            width: double.infinity,
-                            opacity: 0.2,
-                          ),
-                          Skeleton(
-                            height: 20,
-                            width: double.infinity,
-                            opacity: 0.2,
-                          ),
-                          Skeleton(
-                            height: 20,
-                            width: double.infinity,
-                            opacity: 0.2,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }
-          },
         ),
       ),
     );

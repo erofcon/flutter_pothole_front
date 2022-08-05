@@ -111,8 +111,8 @@ class _LoginState extends State<Login> {
 
           APIService.login(model).then((value){
             if (value) {
-              Modular.to.navigate('/info_page');
-              // Modular.to.popAndPushNamed('/info_page');
+              Modular.to.navigate('/info');
+              // Modular.to.popAndPushNamed('/info');
             } else {
               setState(() {
                 isSendingRequest = false;

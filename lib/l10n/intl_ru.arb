@@ -5,6 +5,7 @@
   "sidebar_list_create": "Обноружение",
   "sidebar_list_create_single_task":"Создать задачу",
   "sidebar_list_result_detection": "Результат детектирования",
+  "sidebar_list_task_list": "Список задач",
   "sidebar_menu_tasks": "Задачи",
   "sidebar_menu_map": "Карта",
   "sidebar_menu_report": "Отчет",
@@ -35,5 +36,15 @@
   "data_load_error":"ошибка загрузки данных",
 
   "select_category_dropdown":"выберите категорию",
-  "select_related_user":"выберите исполнителя"
+  "select_related_user":"выберите исполнителя",
+
+  "run_detection": "Запуск на детектирование",
+  "dateTime": "Дата и время",
+  "attach_video": "Прикрепить видео",
+  "select_date_time": "Выбрать дату и время съемки",
+  "select_video": "Выбрать видео",
+  "accepted_video_types": "Допустимые типы файлов: .mp4,  .MJPEG",
+  "upload": "Загрузить"
+
+
 }

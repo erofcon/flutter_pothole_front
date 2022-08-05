@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_pothole_front/models/info_task_card_data.dart';
 import 'package:flutter_pothole_front/utils/constants.dart';
 import 'package:flutter_pothole_front/generated/l10n.dart';
@@ -32,7 +33,7 @@ class TaskInfoCard extends StatelessWidget {
                       child: Text("${info.count}")),
                   TextButton(
                     onPressed: () {
-                      Scaffold.of(context).closeEndDrawer();
+                      Modular.to.pushNamed('/viewTask/73');
                     },
                     style: ButtonStyle(
                         backgroundColor:
@@ -66,8 +67,8 @@ class TaskInfoCard extends StatelessWidget {
 }
 
 // class TaskInfoCard extends StatelessWidget {
-//   const TaskInfoCard({Key? key, required this.info_page, required this.title}) : super(key: key);
-//   final TaskCardInfo info_page;
+//   const TaskInfoCard({Key? key, required this.info, required this.title}) : super(key: key);
+//   final TaskCardInfo info;
 //   final String title;
 //   @override
 //   Widget build(BuildContext context) {
@@ -99,7 +100,7 @@ class TaskInfoCard extends StatelessWidget {
 //                         style: Theme.of(context).textTheme.caption)),
 //                 Container(
 //                   padding: EdgeInsets.only(left: defaultPadding * 0.5),
-//                   child: Text("${info_page.count}"),
+//                   child: Text("${info.count}"),
 //                 ),
 //                 TextButton(onPressed: () {}, child: Text(S.of(context).home_task_card_button)),
 //               ],
@@ -108,11 +109,11 @@ class TaskInfoCard extends StatelessWidget {
 //           if (_size.width > 445 || _size.width <=350)
 //             Container(
 //               decoration: BoxDecoration(
-//                   color: info_page.containerColor,
+//                   color: info.containerColor,
 //                   borderRadius: BorderRadius.circular(10)),
 //               padding: EdgeInsets.all(_responseCount(_size.width)),
-//               child: Icon(info_page.icon,
-//                   color: info_page.iconColor, size: _size.width <= 1160 ? 20 : 24),
+//               child: Icon(info.icon,
+//                   color: info.iconColor, size: _size.width <= 1160 ? 20 : 24),
 //             )
 //         ],
 //       ),

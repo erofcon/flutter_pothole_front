@@ -22,11 +22,16 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "accepted_video_types": MessageLookupByLibrary.simpleMessage(
+            "Допустимые типы файлов: .mp4,  .MJPEG"),
         "app_title": MessageLookupByLibrary.simpleMessage(
             "Система мониторинга дорожного полотна"),
+        "attach_video":
+            MessageLookupByLibrary.simpleMessage("Прикрепить видео"),
         "button_add": MessageLookupByLibrary.simpleMessage("Добавить задачу"),
         "data_load_error":
             MessageLookupByLibrary.simpleMessage("ошибка загрузки данных"),
+        "dateTime": MessageLookupByLibrary.simpleMessage("Дата и время"),
         "home_last_file_grid_title":
             MessageLookupByLibrary.simpleMessage("Последние файлы"),
         "home_statistic_card_title":
@@ -39,10 +44,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Просроченные задачи"),
         "home_task_card_button":
             MessageLookupByLibrary.simpleMessage("показать"),
+        "run_detection":
+            MessageLookupByLibrary.simpleMessage("Запуск на детектирование"),
         "select_category_dropdown":
             MessageLookupByLibrary.simpleMessage("выберите категорию"),
+        "select_date_time":
+            MessageLookupByLibrary.simpleMessage("Выбрать дату и время съемки"),
         "select_related_user":
             MessageLookupByLibrary.simpleMessage("выберите исполнителя"),
+        "select_video": MessageLookupByLibrary.simpleMessage("Выбрать видео"),
         "sidebar_list_create":
             MessageLookupByLibrary.simpleMessage("Обноружение"),
         "sidebar_list_create_single_task":
@@ -50,6 +60,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sidebar_list_info": MessageLookupByLibrary.simpleMessage("Инфо"),
         "sidebar_list_result_detection":
             MessageLookupByLibrary.simpleMessage("Результат детектирования"),
+        "sidebar_list_task_list":
+            MessageLookupByLibrary.simpleMessage("Список задач"),
         "sidebar_menu_log_out": MessageLookupByLibrary.simpleMessage("Выйти"),
         "sidebar_menu_map": MessageLookupByLibrary.simpleMessage("Карта"),
         "sidebar_menu_report": MessageLookupByLibrary.simpleMessage("Отчет"),
@@ -62,6 +74,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "task_grid_executor":
             MessageLookupByLibrary.simpleMessage("Исполнитель"),
         "task_grid_state": MessageLookupByLibrary.simpleMessage("Состояние"),
+        "upload": MessageLookupByLibrary.simpleMessage("Загрузить"),
         "user_is_admin": MessageLookupByLibrary.simpleMessage("администратор"),
         "user_is_curator": MessageLookupByLibrary.simpleMessage("куратор"),
         "user_is_executor": MessageLookupByLibrary.simpleMessage("исполнитель")

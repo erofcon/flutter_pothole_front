@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pothole_front/models/info_task_card_data.dart';
 import 'package:flutter_pothole_front/models/task_grid.dart';
-import 'package:flutter_pothole_front/pages/info_page/components/head.dart';
-import 'package:flutter_pothole_front/pages/info_page/components/info_statistic_card.dart';
-import 'package:flutter_pothole_front/pages/info_page/components/last_files.dart';
-import 'package:flutter_pothole_front/pages/info_page/components/tasks_card.dart';
+import 'package:flutter_pothole_front/pages/info/components/head.dart';
+import 'package:flutter_pothole_front/pages/info/components/info_statistic_card.dart';
+import 'package:flutter_pothole_front/pages/info/components/last_files.dart';
+import 'package:flutter_pothole_front/pages/info/components/tasks_card.dart';
 import 'package:flutter_pothole_front/utils/constants.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/login_response.dart';
 import '../../../models/task_statistic_response.dart';
 import '../../../services/api_service.dart';
-import '../../../services/shared_service.dart';
 import '../../../utils/loading_provider.dart';
 
 class InfoView extends StatefulWidget {
@@ -36,7 +34,6 @@ class _InfoViewState extends State<InfoView> {
 
   void init() async {
     taskStatistic = await APIService.getTaskStatistic();
-    // User? user = await SharedService.getUserDetails();
 
     taskData[0].count = taskStatistic?.countCurrentTasks != null
         ? taskStatistic?.countCurrentTasks.toInt()

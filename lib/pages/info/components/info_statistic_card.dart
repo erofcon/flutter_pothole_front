@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pothole_front/generated/l10n.dart';
-import 'package:flutter_pothole_front/pages/info_page/components/statistic_card_info.dart';
-import 'package:flutter_pothole_front/pages/info_page/components/statistic_chart.dart';
+import 'package:flutter_pothole_front/pages/info/components/statistic_card_info.dart';
+import 'package:flutter_pothole_front/pages/info/components/statistic_chart.dart';
 import 'package:flutter_pothole_front/utils/constants.dart';
 import 'package:flutter_pothole_front/models/info_task_card_data.dart';
 

@@ -1,15 +1,18 @@
 import 'dart:convert';
-import 'dart:html';
-import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as d;
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_pothole_front/models/login_request.dart';
+import 'package:flutter_pothole_front/models/task_response_model.dart';
+import 'package:flutter_pothole_front/models/task_list_response_model.dart';
 import 'package:flutter_pothole_front/services/shared_service.dart';
 import 'package:flutter_pothole_front/utils/constants.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import 'package:large_file_uploader/large_file_uploader.dart';
+
+// import 'package:large_file_uploader/large_file_uploader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/login_response.dart';
@@ -35,7 +38,7 @@ class APIService {
     } catch (e) {
       return false;
     } finally {
-      client.close();
+      // client.close();
     }
   }
 
@@ -100,224 +103,208 @@ class APIService {
     return [];
   }
 
-  static Future<bool> createSingleTask(int categoryId, int executor,
-      DateTime leadTime,
+  static Future<bool> createSingleTask(
+      int categoryId, int executor, DateTime leadTime,
       {String? description,
-        String? latitude,
-        String? longitude,
-        PlatformFile? file}) async {
+      String? latitude,
+      String? longitude,
+      List<PlatformFile>? files}) async {
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('access');
     if (token != null) {
-      Map<String, String> headers = {"Authorization": "Bearer $token"};
+      try {
+        Map<String, String> headers = {"Authorization": "Bearer $token"};
 
-      var url = Uri.parse('$baseUrl/api/v1/task/post/create');
-      var request = http.MultipartRequest('POST', url);
+        String url = '$baseUrl/api/v1/task/post/create';
 
-      request.fields.addAll({
-        'category': categoryId.toString(),
-        'description': description ?? '',
-        'latitude': latitude ?? '',
-        'longitude': longitude ?? '',
-        'executor': executor.toString(),
-        'leadDateTime': leadTime.toString()
-      });
+        FormData formData = FormData.fromMap({
+          'category': categoryId.toString(),
+          'description': description ?? '',
+          'latitude': latitude ?? '',
+          'longitude': longitude ?? '',
+          'executor': executor.toString(),
+          'leadDateTime': leadTime.toString(),
+        });
 
-      request.headers.addAll(headers);
+        if (files != null) {
+          for (PlatformFile file in files) {
+            formData.files.addAll([
+              MapEntry(
+                  "images",
+                  kIsWeb
+                      ? MultipartFile.fromBytes(file.bytes!.toList(),
+                          filename: file.name)
+                      : await MultipartFile.fromFile(file.path!,
+                          filename: file.name))
+            ]);
+          }
+        }
 
-      if (file != null) {
-        request.files.add(http.MultipartFile.fromBytes(
-            'images', file.bytes!.toList(),
-            filename: file.name));
-      }
+        Response response = await Dio().post(
+          url,
+          data: formData,
+          options: Options(headers: headers),
+        );
 
-      http.StreamedResponse response = await request.send();
-
-      if (response.statusCode >= 200 || response.statusCode < 300) {
-        return true;
-      } else {
+        if (response.statusCode! >= 200 && response.statusCode! < 210) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (e) {
         return false;
       }
     }
     return false;
   }
 
+  static Future<TaskResponseModel?> getDetailTask(String taskId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('access');
 
-  static Future<bool> runDetection(
-      DateTime dateTime, File? file, LargeFileUploader largeFileUploader) async {
+    if (token != null) {
+      Map<String, String> headers = {"Authorization": "Bearer $token"};
+      String url = '$baseUrl/api/v1/task/get/$taskId';
+
+      Response response =
+          await d.Dio().get(url, options: d.Options(headers: headers));
+
+      TaskResponseModel model = taskResponseModel(response.toString());
+      return model;
+    }
+    return null;
+  }
+
+  static Future<bool> runDetection(DateTime dateTime, PlatformFile file) async {
     final prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('access');
     if (token != null) {
       Map<String, String> headers = {"Authorization": "Bearer $token"};
 
-      var url = '$baseUrl/api/v1/detection/post/run';
+      String url = '$baseUrl/api/v1/detection/post/run';
 
-      largeFileUploader.upload(headers: headers, uploadUrl: url, onSendProgress: (progress){
-        print(progress);
-      }, data: {
-        'date':dateTime.toString(),
-        'video': file,
+      d.FormData formData = d.FormData.fromMap({
+        'date': dateTime.toString(),
+        'video': await d.MultipartFile.fromFile(file.path!, filename: file.name
+            //show only filename from path
+            ),
       });
 
+      print(formData);
 
+      d.Response response = await d.Dio().post(url,
+          data: formData,
+          options: d.Options(headers: headers), onSendProgress: (send, total) {
+        print((send / total * 100));
+      });
 
-      // var request = http.MultipartRequest('POST', url);
-      //
-      // request.fields.addAll({
-      //   'date': dateTime.toString(),
-      // });
-      //
-      // request.headers.addAll(headers);
-      //
-      // if (file != null) {
-      //   request.files.add(http.MultipartFile.fromBytes(
-      //       'video', file.bytes!.toList(),
-      //       filename: file.name));
-      // }
-      //
-      // http.StreamedResponse response = await request.send();
-      //
-      // if (response.statusCode >= 200 || response.statusCode < 300) {
-      //   return true;
-      // } else {
-      //   return false;
-      // }
+      print(response.statusCode);
     }
     return false;
   }
 
-  // static Future<bool> runDetection(DateTime dateTime, XFile? file) async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final String? token = prefs.getString('access');
-  //   if (token != null) {
-  //     Map<String, String> headers = {"Authorization": "Bearer $token"};
-  //
-  //     var url = Uri.parse('$baseUrl/api/v1/detection/post/run');
-  //     var request = http.MultipartRequest('POST', url);
-  //     request.headers.addAll(headers);
-  //     Uint8List data = await file!.readAsBytes();
-  //
-  //     List<int> list = data.cast();
-  //
-  //     request.fields.addAll({
-  //       'date': dateTime.toString(),
-  //     });
-  //
-  //     request.files.add(http.MultipartFile.fromBytes(
-  //         'video', list,
-  //         filename: file.name));
-  //
-  //     http.StreamedResponse response = await request.send();
-  //     print(response.statusCode);
-  //     if (response.statusCode >= 200 || response.statusCode < 300) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   }
-  //   return false;
-  // }
+  static Future<Map<String, dynamic>> createAnswer(String taskId,
+      {String? description, List<PlatformFile>? files}) async {
+    Map<String, dynamic> response;
+
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('access');
+    if (token != null) {
+      try {
+        Map<String, String> headers = {"Authorization": "Bearer $token"};
+
+        String url = '$baseUrl/api/v1/answer/post/create';
+
+        FormData formData = FormData.fromMap({
+          'task': taskId,
+          'description': description ?? '',
+        });
+
+        if (files != null) {
+          for (PlatformFile file in files) {
+            formData.files.addAll([
+              MapEntry(
+                  "images",
+                  kIsWeb
+                      ? MultipartFile.fromBytes(file.bytes!.toList(),
+                          filename: file.name)
+                      : await MultipartFile.fromFile(file.path!,
+                          filename: file.name))
+            ]);
+          }
+        }
+
+        Response resp = await Dio().post(
+          url,
+          data: formData,
+          options: Options(headers: headers),
+        );
+
+        if (resp.statusCode! >= 200 && resp.statusCode! < 210) {
+          return response = {'completed': true, 'response': resp.toString()};
+        } else {
+          return response = {'completed': false, 'response': resp.toString()};
+        }
+      } catch (e) {
+        return response = {'completed': false, 'response': ''};
+      }
+    }
+    return response = {'completed': false, 'response': ''};
+  }
+
+  static Future<bool> closeTask(String taskId) async {
+
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('access');
+    if (token != null) {
+      try {
+        Map<String, String> headers = {"Authorization": "Bearer $token"};
+
+        String url = '$baseUrl/api/v1/task/put/update/$taskId';
+
+        Response resp = await Dio().put(
+          url,
+          options: Options(headers: headers),
+        );
 
 
-// static Future<bool> runDetection(
-//     DateTime dateTime, PlatformFile? file) async {
-//   final prefs = await SharedPreferences.getInstance();
-//   final String? token = prefs.getString('access');
-//   if (token != null) {
-//     Map<String, String> headers = {"Authorization": "Bearer $token"};
-//
-//     var url = Uri.parse('$baseUrl/api/v1/detection/post/run');
-//     var request = http.MultipartRequest('POST', url);
-//
-//     request.fields.addAll({
-//       'date': dateTime.toString(),
-//     });
-//
-//     request.headers.addAll(headers);
-//
-//     if (file != null) {
-//       // request.files.add(http.MultipartFile(
-//       //     "Your parameter name on server side",
-//       //     file.readStream!,
-//       //     file.size,
-//       //     filename: file.name));
-//
-//
-//       request.files.add(http.MultipartFile.fromBytes(
-//           'video', file.bytes!.toList(growable: false),
-//           filename: file.name));
-//     }
-//
-//     http.StreamedResponse response = await request.send();
-//     print(response.statusCode);
-//     if (response.statusCode >= 200 || response.statusCode < 300) {
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   }
-//   return false;
-// }
+        if (resp.statusCode! >= 200 && resp.statusCode! < 210) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (e) {
+        return false;
+      }
+    }
+    return false;
+  }
 
-// static Future<bool> runDetection(DateTime dateTime, PlatformFile? file,
-//     void Function(double k) upload) async {
-//   final prefs = await SharedPreferences.getInstance();
-//   final String? token = prefs.getString('access');
-//   if (token != null) {
-//     Map<String, String> headers = {"Authorization": "Bearer $token"};
-//
-//     String url = '$baseUrl/api/v1/detection/post/run';
-//
-//     FormData formData = FormData.fromMap({
-//       'date': dateTime.toString(),
-//       'video':
-//           MultipartFile.fromBytes(file!.bytes!.toList(), filename: file.name)
-//     });
-//
-//     Response response = await Dio().post(url,
-//         data: formData,
-//         options: Options(headers: headers), onSendProgress: (send, total) {
-//       upload((send / total * 100));
-//     });
-//
-//     print(response.statusCode);
-//   }
-//
-//   return false;
-//
-//   // return false;
-// }
+  static Future<String?> getTaskList() async {
 
-// static Future<bool> runDetection(
-//     DateTime dateTime, PlatformFile? file) async {
-//   final prefs = await SharedPreferences.getInstance();
-//   final String? token = prefs.getString('access');
-//   if (token != null) {
-//     Map<String, String> headers = {"Authorization": "Bearer $token"};
-//
-//     var url = Uri.parse('$baseUrl/api/v1/detection/post/run');
-//     var request = http.MultipartRequest('POST', url);
-//
-//     request.fields.addAll({
-//       'date': dateTime.toString(),
-//     });
-//
-//     request.headers.addAll(headers);
-//
-//     if (file != null) {
-//       request.files.add(http.MultipartFile.fromBytes(
-//           'video', file.bytes!.toList(),
-//           filename: file.name));
-//     }
-//
-//     http.StreamedResponse response = await request.send();
-//
-//     if (response.statusCode >= 200 || response.statusCode < 300) {
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   }
-//   return false;
-// }
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('access');
+    if (token != null) {
+      try {
+        Map<String, String> headers = {"Authorization": "Bearer $token"};
+
+        String url = '$baseUrl/api/v1/task/get';
+
+        Response resp = await Dio().get(
+          url,
+          options: Options(headers: headers),
+        );
+
+
+        if (resp.statusCode! >= 200 && resp.statusCode! < 210) {
+          return resp.toString();
+        } else {
+          return null;
+        }
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  }
 }

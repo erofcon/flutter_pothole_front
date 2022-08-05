@@ -19,9 +19,6 @@ class TaskGrid {
 
 
 
-
-
-
 List demoRecentFiles = [
   RecentFile(
     icon: "assets/icons/task.svg",

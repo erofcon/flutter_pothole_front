@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class IsLoadingState with ChangeNotifier {
   bool _isLoading = true;

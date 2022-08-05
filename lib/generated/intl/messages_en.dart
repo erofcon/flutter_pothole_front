@@ -22,11 +22,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "accepted_video_types": MessageLookupByLibrary.simpleMessage(
+            "Accepted File Types: .mp4,  .MJPEG"),
         "app_title":
             MessageLookupByLibrary.simpleMessage("Road monitoring system"),
+        "attach_video": MessageLookupByLibrary.simpleMessage("Attach video"),
         "button_add": MessageLookupByLibrary.simpleMessage("Add task"),
         "data_load_error":
             MessageLookupByLibrary.simpleMessage("data load error"),
+        "dateTime": MessageLookupByLibrary.simpleMessage("DateTime"),
         "home_last_file_grid_title":
             MessageLookupByLibrary.simpleMessage("Last files"),
         "home_statistic_card_title":
@@ -39,10 +43,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Overdue tasks"),
         "home_task_card_button":
             MessageLookupByLibrary.simpleMessage("view more"),
+        "run_detection": MessageLookupByLibrary.simpleMessage("Run detection"),
         "select_category_dropdown":
             MessageLookupByLibrary.simpleMessage("выберите категорию"),
+        "select_date_time":
+            MessageLookupByLibrary.simpleMessage("Select DateTime"),
         "select_related_user":
             MessageLookupByLibrary.simpleMessage("choose executor"),
+        "select_video": MessageLookupByLibrary.simpleMessage("Select video"),
         "sidebar_list_create":
             MessageLookupByLibrary.simpleMessage("Detection"),
         "sidebar_list_create_single_task":
@@ -50,6 +58,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sidebar_list_info": MessageLookupByLibrary.simpleMessage("info"),
         "sidebar_list_result_detection":
             MessageLookupByLibrary.simpleMessage("Result of detection"),
+        "sidebar_list_task_list":
+            MessageLookupByLibrary.simpleMessage("Task list"),
         "sidebar_menu_log_out": MessageLookupByLibrary.simpleMessage("Logout"),
         "sidebar_menu_map": MessageLookupByLibrary.simpleMessage("Map"),
         "sidebar_menu_report": MessageLookupByLibrary.simpleMessage("Report"),
@@ -61,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Description"),
         "task_grid_executor": MessageLookupByLibrary.simpleMessage("Executor"),
         "task_grid_state": MessageLookupByLibrary.simpleMessage("State"),
+        "upload": MessageLookupByLibrary.simpleMessage("upload"),
         "user_is_admin": MessageLookupByLibrary.simpleMessage("administrator"),
         "user_is_curator": MessageLookupByLibrary.simpleMessage("curator"),
         "user_is_executor": MessageLookupByLibrary.simpleMessage("executor")

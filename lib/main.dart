@@ -7,11 +7,13 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_pothole_front/generated/l10n.dart';
 import 'package:flutter_pothole_front/pages/create_task/create_task_page.dart';
 import 'package:flutter_pothole_front/pages/detection_edit/detetction_edit_page.dart';
-import 'package:flutter_pothole_front/pages/detection_result_page/detection_result_page.dart';
-import 'package:flutter_pothole_front/pages/home_page/home_page.dart';
-import 'package:flutter_pothole_front/pages/info_page/info_page.dart';
+import 'package:flutter_pothole_front/pages/detection_result/detection_result_page.dart';
+import 'package:flutter_pothole_front/pages/home/home_page.dart';
+import 'package:flutter_pothole_front/pages/info/info_page.dart';
 import 'package:flutter_pothole_front/pages/login/login.dart';
-import 'package:flutter_pothole_front/pages/map_page/map_page.dart';
+import 'package:flutter_pothole_front/pages/map/map_page.dart';
+import 'package:flutter_pothole_front/pages/task_list/task_list.dart';
+import 'package:flutter_pothole_front/pages/view_task/view_task.dart';
 import 'package:flutter_pothole_front/services/shared_service.dart';
 import 'package:flutter_pothole_front/utils/theme.dart';
 
@@ -24,7 +26,7 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Modular.setInitialRoute('/info_page');
+    Modular.setInitialRoute('/');
 
     return AdaptiveTheme(
       light: lightTheme,
@@ -54,31 +56,38 @@ class AppModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/', child: (context, args) => const HomePage(), children: [
-          ChildRoute('/info_page',
-              child: (context, args) => const Info(),
-              transition: TransitionType.downToUp,
-              guards: [AuthGuard()]),
-          ChildRoute('/createTask',
-              child: (context, args) => const CreateTask(),
-              transition: TransitionType.downToUp,
-              guards: [AuthGuard()]),
-          ChildRoute('/detectionResult',
-              child: (context, args) => const DetectionResult(),
-              transition: TransitionType.downToUp,
-              guards: [AuthGuard()]),
-          ChildRoute('/map',
-              child: (context, args) => const MapPage(),
-              transition: TransitionType.downToUp,
-              guards: [AuthGuard()]),
-          ChildRoute('/detectionResult/:id',
-              child: (context, args) => const DetectionEdit(),
-              transition: TransitionType.downToUp,
-              guards: [AuthGuard()]),
-        ], guards: [
-          AuthGuard()
-        ]),
-        ChildRoute('/login', child: (context, args) => const Login()),
+
+    ChildRoute('/', child: (context, args) => const Info()),
+    ChildRoute('/login', child: (context, args) => const Login()),
+
+
+      //   ChildRoute('/', child: (context, args) => const HomePage(), children: [
+      //     ChildRoute('/info',
+      //         child: (context, args) => const Info(),
+      //         guards: [AuthGuard()]),
+      //     ChildRoute('/createTask',
+      //         child: (context, args) => const CreateTask(),
+      //         guards: [AuthGuard()]),
+      //     ChildRoute('/detectionResult',
+      //         child: (context, args) => const DetectionResult(),
+      //         guards: [AuthGuard()]),
+      //     ChildRoute('/taskList',
+      //         child: (context, args) => const TaskListPage(),
+      //         guards: [AuthGuard()]),
+      //     ChildRoute('/map',
+      //         child: (context, args) => const MapPage(),
+      //         guards: [AuthGuard()]),
+      //     ChildRoute('/detectionResult/:id',
+      //         child: (context, args) => const DetectionEdit(),
+      //         guards: [AuthGuard()]),
+      //     ChildRoute('/viewTask/:id',
+      //         child: (context, args) => const ViewTask(),
+      //         // transition: TransitionType.size,
+      //         guards: [AuthGuard()]),
+      //   ], guards: [
+      //     AuthGuard()
+      //   ]),
+      //   ChildRoute('/login', child: (context, args) => const Login()),
       ];
 }
 

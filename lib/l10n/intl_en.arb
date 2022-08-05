@@ -5,6 +5,7 @@
   "sidebar_list_create": "Detection",
   "sidebar_list_create_single_task":"Create task",
   "sidebar_list_result_detection": "Result of detection",
+  "sidebar_list_task_list": "Task list",
   "sidebar_menu_tasks": "Tasks",
   "sidebar_menu_map": "Map",
   "sidebar_menu_report": "Report",
@@ -34,5 +35,13 @@
 
   "data_load_error":"data load error",
   "select_category_dropdown":"выберите категорию",
-  "select_related_user":"choose executor"
+  "select_related_user":"choose executor",
+
+  "run_detection": "Run detection",
+  "dateTime": "DateTime",
+  "attach_video": "Attach video",
+  "select_date_time": "Select DateTime",
+  "select_video": "Select video",
+  "accepted_video_types": "Accepted File Types: .mp4,  .MJPEG",
+  "upload": "upload"
 }

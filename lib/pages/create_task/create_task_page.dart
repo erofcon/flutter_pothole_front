@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_pothole_front/pages/create_task/components/run_detection.dart';
 import 'package:flutter_pothole_front/pages/create_task/components/single_task_page.dart';
 
 import '../../models/login_response.dart';
 import '../../services/shared_service.dart';
+// import 'package:flutter_pothole_front/pages/create_task/components/upload_video_widget.dart';
+import 'package:flutter_pothole_front/pages/create_task/components/upload_video_io.dart'
+if (dart.library.html) 'package:flutter_pothole_front/pages/create_task/components/upload_video_web.dart';
+
+
+
 
 class CreateTask extends StatefulWidget {
   const CreateTask({Key? key}) : super(key: key);
@@ -14,6 +19,7 @@ class CreateTask extends StatefulWidget {
 }
 
 class _CreateTaskState extends State<CreateTask> {
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +54,7 @@ class _CreateTaskState extends State<CreateTask> {
             child: TabBarView(
               children: [
                 SingleTaskPage(),
+                // RunDetectionPage(),
                 RunDetection(),
               ],
             ),
